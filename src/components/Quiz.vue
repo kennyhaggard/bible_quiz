@@ -64,7 +64,7 @@ const score = computed(() => quizStore.score);
 
 // Build the share URL based on the quiz store state.
 const shareURL = computed(() => {
-  return `${window.location.origin}/quiz?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
+  return `${window.location.origin}/bible_quiz?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
 });
 
 const copySuccess = ref(false);
