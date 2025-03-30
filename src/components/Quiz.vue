@@ -4,6 +4,7 @@
     <div v-if="quizStore.isQuizFinished" class="final-results">
       <h2>Quiz-i përfundoi!</h2>
       <p>Pikët: {{ score }} / {{ totalQuestions }}</p>
+      <p> Share should be next...</p>
       <div class="share">
         <h3>Shpërndaje Quiz-in:</h3>
         <input type="text" :value="shareURL" readonly />
