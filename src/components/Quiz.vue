@@ -19,28 +19,28 @@ import { ref, computed } from 'vue';
 import { useQuizStore } from '../store/quizStore';
 
 const quizStore = useQuizStore();
-const copySuccess = ref(false);
 
-// Assuming these properties exist in your store
+// This computed property should be true when the quiz is finished
+const quizFinished = computed(() => quizStore.isQuizFinished);
+
+// Score and totalQuestions
 const score = computed(() => quizStore.score);
 const totalQuestions = computed(() => quizStore.selectedQuestions.length);
-const seed = computed(() => quizStore.seed); // make sure you save the seed when starting the quiz
-const selectedNum = computed(() => quizStore.selectedNumber);
 
-// Build the share URL using the current origin and query parameters
+// Share URL computed using the seed and selected number stored in your quizStore
 const shareURL = computed(() => {
-  return `${window.location.origin}/quiz?seed=${seed.value}&num=${selectedNum.value}`;
+  return `${window.location.origin}/quiz?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
 });
+
+// For the "copy success" message
+const copySuccess = ref(false);
 
 function copyLink() {
   navigator.clipboard.writeText(shareURL.value).then(() => {
     copySuccess.value = true;
-    // Hide the success message after 3 seconds
-    setTimeout(() => copySuccess.value = false, 3000);
+    setTimeout(() => (copySuccess.value = false), 3000);
   });
 }
-
-const quizFinished = computed(() => quizStore.isQuizFinished);
 </script>
 
 <style scoped>
