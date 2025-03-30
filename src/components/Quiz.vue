@@ -2,7 +2,7 @@
   <div class="quiz">
     <!-- Final Results with Share Section -->
     <div v-if="quizStore.isQuizFinished" class="final-results">
-      <h2>Quiz-i përfundoi!</h2>
+      <h2>Quiz-i përfundoi woo hoo!!</h2>
       <p>Pikët: {{ score }} / {{ totalQuestions }}</p>
       <p> Share should be next...</p>
       <div class="share">
