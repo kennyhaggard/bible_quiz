@@ -15,15 +15,15 @@ import Quiz from './components/Quiz.vue';
 const quizStore = useQuizStore();
 
 // Parse URL parameters
-const urlParams = new URLSearchParams(window.location.search);
-const seedParam = urlParams.get('seed');
-const numParam = urlParams.get('num');
+// const urlParams = new URLSearchParams(window.location.search);
+// const seedParam = urlParams.get('seed');
+// const numParam = urlParams.get('num');
 
-if (seedParam && numParam) {
-  const numQuestions = parseInt(numParam);
-  quizStore.setSelectedNumber(numQuestions);
-  quizStore.startQuizWithSeed(seedParam, numQuestions);
-}
+//if (seedParam && numParam) {
+//  const numQuestions = parseInt(numParam);
+//  quizStore.setSelectedNumber(numQuestions);
+//  quizStore.startQuizWithSeed(seedParam, numQuestions);
+//}
 
 // Determine if quiz has started by checking if selectedQuestions has items
 const quizStarted = computed(() => quizStore.selectedQuestions.length > 0);
