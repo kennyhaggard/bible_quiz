@@ -1,0 +1,87 @@
+[
+  {
+    "id": 1,
+    "type": "multiple_choice",
+    "question": "Si quhej nipi i Abrahamit?",
+    "options": [
+      "Lot",
+      "Ishmael",
+      "Haran",
+      "Eliezer"
+    ],
+    "answer": "Lot",
+    "miniLesson": "Në librin e Zanafilla, Lot përmendet si nipi i Abrahamit. Kjo histori na tregon rëndësinë e marrëdhënieve familjare në kontekstin biblik."
+  },
+  {
+    "id": 2,
+    "type": "multiple_choice",
+    "question": "Nga cili vend erdhi Agari?",
+    "options": [
+      "Nga Egjipti",
+      "Nga Kanaan",
+      "Nga Mesopotamia",
+      "Nga Babiloni"
+    ],
+    "answer": "Nga Egjipti",
+    "miniLesson": "Sipas tregimeve biblike në Zanafilla, Agari erdhi nga Egjipti, duke reflektuar udhëtimet dhe mjediset e ndryshme historike të kohës."
+  },
+  {
+    "id": 3,
+    "type": "multiple_choice",
+    "question": "Për çfarë jemi në një erë vdekjeje?",
+    "options": [
+      "Për ata që e humbasin jetën",
+      "Për ata që jetojnë pa besim",
+      "Për ata që nuk kërkojnë shpëtimin",
+      "Për ata që e kalojnë jetën pa vlera"
+    ],
+    "answer": "Për ata që e humbasin jetën",
+    "miniLesson": "Ky koncept, i përmendur në 2 Korintasit, na kujton se humbja e jetës shpëtimtare ndodh kur njerëzit e refuzojnë vërtetë të jetojnë sipas udhëzimeve hyjnore."
+  },
+  {
+    "id": 4,
+    "type": "multiple_choice",
+    "question": "Biri i njeriut nuk ka ardhur për t'i shërbyer, por... ?",
+    "options": [
+      "... për t'i shërbyer dhe për t'u dhënë jetën e Tij si shembull për shpëtimin e shumave",
+      "... për t'i shërbyer vetëm atyre që e besojnë",
+      "... për të udhëhequr popullin drejt shpëtimit",
+      "... për të bërë mrekulli dhe për të shpëtuar të zgjedhurit"
+    ],
+    "answer": "... për t'i shërbyer dhe për t'u dhënë jetën e Tij si shembull për shpëtimin e shumave",
+    "miniLesson": "Marku 10:45 na kujton se Biri i njeriut erdhi për të shërbyer, duke ofruar një shembull të përkushtimit dhe sakrificës për të gjithë njerëzit."
+  },
+  {
+    "id": 5,
+    "type": "multiple_choice",
+    "question": "Kush kane mekatuar, sipas letres drejtuar Romakëve?",
+    "options": [
+      "Të gjithë",
+      "Vetëm të udhëhequrit",
+      "Vetëm shenjtorët",
+      "Vetëm besimtarët"
+    ],
+    "answer": "Të gjithë",
+    "miniLesson": "Romakët theksojnë se të gjithë kemi mëkatuar, duke nxitur vetë-reflektim dhe nevojën për shpëtim për secilin prej nesh."
+  },
+  {
+    "id": 6,
+    "type": "multiple_choice",
+    "question": "Kush thote: \"Perëndi nuk ka.\"?",
+    "options": [
+      "Njeriu i pa mend",
+      "Muzakërat e kohës",
+      "Fëmijët e mëdhenj",
+      "Njerëzit e mëdhenj"
+    ],
+    "answer": "Njeriu i pa mend",
+    "miniLesson": "Psalmi 53 ilustron se mohohet pranimi i Perëndisë nga ata që refuzojnë të njohin fuqinë dhe dashurinë e Tij, duke u bërë kështu të 'pa mend' në shpirt."
+  },
+  {
+    "id": 7,
+    "type": "fill_in_blank",
+    "question": "Plotësoni boshllëkun në këtë varg (John 3:16): 'Sepse kaq shumë e adhuronte Perëndia ______, që i dha Birin e vet të vetëm, që çdo besimtar të mos humbë, por të ketë jetën e përjetshme.'",
+    "answer": "botën",
+    "miniLesson": "Ky varg thekson dashurinë e pakufishme të Perëndisë për njerëzit. Mungesa e fjalës 'botën' tregon rëndësinë e çdo njeriu në planin e shpëtimit hyjnor."
+  }
+]
