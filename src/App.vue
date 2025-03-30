@@ -1,11 +1,3 @@
-<template>
-  <div id="app">
-    <!-- Show QuizSetup if quiz not started; otherwise show Quiz -->
-    <QuizSetup v-if="!quizStarted" />
-    <Quiz v-else />
-  </div>
-</template>
-
 <script setup>
 import { computed } from 'vue';
 import { useQuizStore } from './store/quizStore';
@@ -14,17 +6,25 @@ import Quiz from './components/Quiz.vue';
 
 const quizStore = useQuizStore();
 
-// Parse URL parameters
-// const urlParams = new URLSearchParams(window.location.search);
-// const seedParam = urlParams.get('seed');
-// const numParam = urlParams.get('num');
+const urlParams = new URLSearchParams(window.location.search);
+const seedParam = urlParams.get('seed');
+const numParam = urlParams.get('num');
 
-//if (seedParam && numParam) {
-//  const numQuestions = parseInt(numParam);
-//  quizStore.setSelectedNumber(numQuestions);
-//  quizStore.startQuizWithSeed(seedParam, numQuestions);
-//}
+console.log("URL seed:", seedParam, "and num:", numParam);
 
-// Determine if quiz has started by checking if selectedQuestions has items
+// Only auto-start if both parameters are provided and valid
+if (seedParam && numParam && !isNaN(parseInt(numParam))) {
+  const numQuestions = parseInt(numParam);
+  quizStore.setSelectedNumber(numQuestions);
+  quizStore.startQuizWithSeed(seedParam, numQuestions);
+}
+
 const quizStarted = computed(() => quizStore.selectedQuestions.length > 0);
 </script>
+
+<template>
+  <div id="app">
+    <QuizSetup v-if="!quizStarted" />
+    <Quiz v-else />
+  </div>
+</template>
