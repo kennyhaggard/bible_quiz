@@ -27,7 +27,8 @@
       </div>
       
       <!-- Question Card -->
-      <div v-else class="question-card">
+      <div v-else class="question-card">npm run dev
+
         <p>{{ currentQuestion.question }}</p>
         <div v-if="currentQuestion.type === 'multiple_choice'">
           <ul>
