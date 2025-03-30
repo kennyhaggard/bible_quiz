@@ -83,5 +83,83 @@
     "question": "Plotësoni boshllëkun në këtë varg (Gjoni 3:16): 'Sepse Perëndia e deshi aq ______, sa dha Birin e tij të vetëmlindurin, që, kushdo që beson në të, të mos humbasë, por të ketë jetë të përjetshme.'",
     "answer": "botën",
     "miniLesson": "Ky varg thekson dashurinë e pakufishme të Perëndisë për njerëzit. Mungesa e fjalës 'botën' tregon rëndësinë e çdo njeriu në planin e shpëtimit hyjnor."
+  },
+  {
+    "id": 8,
+    "type": "multiple_choice",
+    "question": "Cila eshte rruga e vetme per tek Ati?",
+    "options": [
+      "Jezus Krishti",
+      "Shenorët e Pasurisë",
+      "Profeti Elia",
+      "Fuqia e Besimit"
+    ],
+    "answer": "Jezus Krishti",
+    "miniLesson": "Ky pyetje thekson rëndësinë e rrugës së shpëtimit, duke shpjeguar se vetëm nëpërmjet Jezus Krishtit mund të arrihet Mbreteria e Perëndisë."
+  },
+  {
+    "id": 9,
+    "type": "multiple_choice",
+    "question": "Cfare i tha Zoti Jezus Nikodemit se duhet të ndodhe perpara se dikush te shohe Mbreterine e Perëndise?",
+    "options": [
+      "Ai duhet te rilinde",
+      "Duhet të rinovohet shpirtërisht",
+      "Duhet të bëjë një premtim të ri",
+      "Duhet të fillojë një krishterim"
+    ],
+    "answer": "Ai duhet te rilinde",
+    "miniLesson": "Ky pyetje shpjegon nevojën për një ringjallje shpirtërore para se të mund të shikohet Mbreteria e Perëndisë, duke theksuar transformimin personal në besim."
+  },
+  {
+    "id": 10,
+    "type": "multiple_choice",
+    "question": "Ku eshte zgjedhur dhe eshte vendosur nje gur çipi?",
+    "options": [
+      "Ne Sion",
+      "Në Jeruzalem",
+      "Në Galile",
+      "Në Nazaret"
+    ],
+    "answer": "Ne Sion",
+    "miniLesson": "Ky pyetje nënvizon rëndësinë simbolike të Sionit në shkrimet biblike, ku gurët çip konsiderohen themele të besimit dhe të komunitetit shpirtëror."
+  },
+  {
+    "id": 11,
+    "type": "multiple_choice",
+    "question": "Sa burra i la Zoti per Veten e Tij, ge nuk u perkulën para zotit te Balit?",
+    "options": [
+      "Shtate mije",
+      "Pesë mije",
+      "Një mijë",
+      "Dhjetë mije"
+    ],
+    "answer": "Shtate mije",
+    "miniLesson": "Kjo pyetje përdor numra simbolikë për të theksuar përkushtimin e vërtetë ndaj Zotit, sipas rrëfimeve biblike."
+  },
+  {
+    "id": 12,
+    "type": "multiple_choice",
+    "question": "Pse pagezonte Gjon Pagezori ne Enon, afer Salimit?",
+    "options": [
+      "Sepse atje kishte shume uje",
+      "Sepse atje kishte peme të frutave",
+      "Sepse atje kishte shume dritë",
+      "Sepse atje kishte shumë shkreta"
+    ],
+    "answer": "Sepse atje kishte shume uje",
+    "miniLesson": "Ky pyetje shpjegon kontekstin në të cilin Gjoni Pagezori pagezonte, duke theksuar rëndësinë e ujit si një element kyç në shpjegimin e mrekullive biblike."
+  },
+  {
+    "id": 13,
+    "type": "multiple_choice",
+    "question": "Kush do te deshmojë tek ne per Zotin Jezus?",
+    "options": [
+      "Fryma e se vertetes, Ngushëlluesi",
+      "Profeti Ibrahimi",
+      "Shenrati i Kishës",
+      "Dashuria e Perëndisë"
+    ],
+    "answer": "Fryma e se vertetes, Ngushëlluesi",
+    "miniLesson": "Ky pyetje reflekton premtimin se Fryma e Vërtetë, e njohur edhe si Ngushëlluesi, do të dëshmojë për Jezus, duke forcuar besimin në mes të sfidave."
   }
 ]
