@@ -34,12 +34,15 @@
     </div>
 
     <!-- Feedback Panel: Displayed after a correct answer or after second attempt -->
-    <div v-if="!quizStore.isQuizFinished && showFeedback" class="feedback-panel">
+    <div v-if="!quizFinished && showFeedback" class="feedback-panel">
       <p class="feedback-message">{{ feedbackMessage }}</p>
       <div class="mini-lesson">
-        <p><strong>Leksion:</strong> {{ currentQuestion.miniLesson }}</p>
+        <p><strong>Mesimi:</strong> {{ currentQuestion.miniLesson }}</p>
       </div>
-      <button class="next-btn" @click="nextQuestion">Pyetje tjetër</button>
+      <!-- Conditionally change button text: if current is last question, show "Perfundo" -->
+      <button class="next-btn" @click="nextQuestion">
+        {{ quizStore.currentQuestionIndex + 1 === totalQuestions ? 'Perfundo' : 'Pyetje tjetër' }}
+      </button>
     </div>
 
     <!-- Final Results Screen -->
