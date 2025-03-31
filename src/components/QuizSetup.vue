@@ -1,6 +1,9 @@
 <template>
   <div class="setup-container">
-    <h1>Vendos Parametrat e Quiz-it</h1>
+    <header class = 'quiz-header'>
+	<h1>Pyetje Biblike</h1>
+    </header>
+	<h2>Vendos Parametrat e Quiz-it</h2>
     <div class="setup-content">
       <label class="label" for="numQuestions">Zgjidh numrin e pyetjeve:</label>
       <select v-model="selectedNumber" id="numQuestions" class="select">
@@ -38,6 +41,20 @@ function startQuiz() {
   text-align: center;
   padding: 1rem;
 }
+
+/* Header with gradient background */
+.quiz-header {
+  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  padding: 1rem;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+.quiz-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
 
 .setup-container h1 {
   font-size: 2rem;
