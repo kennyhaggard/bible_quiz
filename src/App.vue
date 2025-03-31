@@ -28,3 +28,14 @@ const quizStarted = computed(() => quizStore.selectedQuestions.length > 0);
     <Quiz v-else />
   </div>
 </template>
+
+<style>
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+               "Roboto", "Helvetica Neue", Arial, sans-serif;
+}
+
+</style>
