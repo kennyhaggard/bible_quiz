@@ -1,26 +1,48 @@
 <template>
   <div class="quiz-container">
-    <!-- Header and progress indicator (only when quiz is in progress) -->
-    <header class="quiz-header" v-if="!quizStore.isQuizFinished">
+    <!-- When quiz is in progress and not showing feedback -->
+    <header class="quiz-header" v-if="!quizStore.isQuizFinished && !showFeedback">
       <h1>Pyetje Biblike</h1>
-      <p class="progress">
-        Pyetja {{ quizStore.currentQuestionIndex + 1 }} nga {{ totalQuestions }}
-      </p>
+      <p class="progress">Pyetja {{ quizStore.currentQuestionIndex + 1 }} nga {{ totalQuestions }}</p>
     </header>
 
-    <!-- Quiz Card: displays current question and options -->
-    <div v-if="!quizStore.isQuizFinished" class="quiz-card">
+    <!-- Quiz Card: Display question or fill-in input when feedback panel is not active -->
+    <div v-if="!quizStore.isQuizFinished && !showFeedback" class="quiz-card">
       <p class="question-text">{{ currentQuestion.question }}</p>
-      <ul class="options-list">
+      
+      <!-- Multiple Choice Options -->
+      <ul v-if="currentQuestion.type === 'multiple_choice'" class="options-list">
         <li v-for="option in currentQuestion.options" :key="option">
-          <button class="option-btn" @click="submitAnswer(option)">
-            {{ option }}
-          </button>
+          <button class="option-btn" @click="submitAnswer(option)">{{ option }}</button>
         </li>
       </ul>
+
+      <!-- Fill in the Blank -->
+      <div v-else-if="currentQuestion.type === 'fill_in_blank'" class="fill-blank">
+        <input
+          v-model="userAnswer"
+          placeholder="Shkruani përgjigjen këtu"
+          class="fill-input"
+        />
+        <button class="option-btn" @click="submitAnswer(userAnswer)">Dërgo</button>
+      </div>
+
+      <!-- Inline error message for first wrong attempt -->
+      <div v-if="feedbackMessage && attemptCount < 2" class="inline-feedback">
+        <p class="error-message">{{ feedbackMessage }}</p>
+      </div>
     </div>
 
-    <!-- Final Results: shows score and share link -->
+    <!-- Feedback Panel: Displayed after a correct answer or after second attempt -->
+    <div v-if="!quizStore.isQuizFinished && showFeedback" class="feedback-panel">
+      <p class="feedback-message">{{ feedbackMessage }}</p>
+      <div class="mini-lesson">
+        <p><strong>Leksion:</strong> {{ currentQuestion.miniLesson }}</p>
+      </div>
+      <button class="next-btn" @click="nextQuestion">Pyetje tjetër</button>
+    </div>
+
+    <!-- Final Results Screen -->
     <div v-if="quizStore.isQuizFinished" class="final-results">
       <h2>Quiz-i Përfundoi!</h2>
       <p>Pikët: {{ quizStore.score }} / {{ totalQuestions }}</p>
@@ -39,44 +61,60 @@ import { ref, computed } from 'vue';
 import { useQuizStore } from '../store/quizStore';
 
 const quizStore = useQuizStore();
-const copySuccess = ref(false);
 
-// Total questions and current question from the store.
+const userAnswer = ref('');
+const attemptCount = ref(0);
+const feedbackMessage = ref('');
+// Control when to display the full feedback panel (hides question card)
+const showFeedback = ref(false);
+
 const totalQuestions = computed(() => quizStore.selectedQuestions.length);
 const currentQuestion = computed(() => quizStore.currentQuestion);
 
-// Function to submit an answer.
-// For demonstration, we assume a simple check for correctness.
-function submitAnswer(option) {
-  const normalizedOption = option.trim().toLowerCase();
-  const normalizedAnswer = currentQuestion.value.answer.trim().toLowerCase();
+// Submit answer function, handles both multiple choice and fill-in
+function submitAnswer(answer) {
+  // Prevent duplicate submission if feedback panel is active
+  if (showFeedback.value) return;
 
-  // Update score and mini lesson based on correctness.
-  if (normalizedOption === normalizedAnswer) {
+  const normalizedAnswer = (typeof answer === 'string' ? answer.trim().toLowerCase() : answer);
+  const normalizedCorrect = currentQuestion.value.answer.trim().toLowerCase();
+
+  if (normalizedAnswer === normalizedCorrect) {
+    feedbackMessage.value = "Saktë!";
+    showFeedback.value = true;
     quizStore.answerQuestion(true, currentQuestion.value.miniLesson);
   } else {
-    quizStore.answerQuestion(false, currentQuestion.value.miniLesson);
+    attemptCount.value++;
+    if (attemptCount.value < 2) {
+      feedbackMessage.value = "Gabim, provo përsëri!";
+    } else {
+      feedbackMessage.value = `Gabim. Përgjigjja e saktë është: ${currentQuestion.value.answer}`;
+      showFeedback.value = true;
+      quizStore.answerQuestion(false, currentQuestion.value.miniLesson);
+    }
   }
-
-  // Advance to the next question after a short delay.
-  setTimeout(() => {
-    quizStore.nextQuestion();
-  }, 500);
 }
 
-// Computed property for generating the share URL.
-// It uses the current seed and selected number from the quiz store.
+// Move to the next question
+function nextQuestion() {
+  feedbackMessage.value = '';
+  userAnswer.value = '';
+  attemptCount.value = 0;
+  showFeedback.value = false;
+  quizStore.nextQuestion();
+}
+
+// Computed share URL using current seed and number of questions
 const shareURL = computed(() => {
   return `${window.location.origin}/bible_quiz/?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
 });
 
-// Copy share URL to clipboard.
+// Clipboard copy logic
+const copySuccess = ref(false);
 function copyLink() {
   navigator.clipboard.writeText(shareURL.value).then(() => {
     copySuccess.value = true;
-    setTimeout(() => {
-      copySuccess.value = false;
-    }, 3000);
+    setTimeout(() => (copySuccess.value = false), 3000);
   });
 }
 </script>
@@ -148,6 +186,65 @@ function copyLink() {
 }
 .option-btn:hover {
   background: linear-gradient(135deg, #2ecc71, #3498db);
+  transform: scale(1.02);
+}
+
+/* Fill-in-the-blank styling */
+.fill-blank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.fill-input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+/* Inline feedback styling */
+.inline-feedback {
+  margin-top: 1rem;
+}
+.error-message {
+  color: red;
+  font-size: 1.1rem;
+}
+
+/* Feedback Panel styling */
+.feedback-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.feedback-message {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+.mini-lesson {
+  margin: 1rem 0;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.next-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+}
+.next-btn:hover {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
   transform: scale(1.02);
 }
 
