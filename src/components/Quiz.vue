@@ -1,18 +1,20 @@
 <template>
   <div class="quiz-container">
-    <!-- When quiz is in progress and not showing feedback -->
-    <header class="quiz-header" v-if="!quizStore.isQuizFinished && !showFeedback">
+    <!-- Header & Progress (only when quiz in progress and not showing feedback) -->
+    <header class="quiz-header" v-if="!quizFinished && !showFeedback">
       <h1>Pyetje Biblike</h1>
-      <p class="progress">Pyetja {{ quizStore.currentQuestionIndex + 1 }} nga {{ totalQuestions }}</p>
+      <p class="progress">
+        Pyetja {{ quizStore.currentQuestionIndex + 1 }} nga {{ totalQuestions }}
+      </p>
     </header>
 
-    <!-- Quiz Card: Display question or fill-in input when feedback panel is not active -->
-    <div v-if="!quizStore.isQuizFinished && !showFeedback" class="quiz-card">
+    <!-- Quiz Card: Display question (or fill-in input) when feedback panel is not active -->
+    <div v-if="!quizFinished && !showFeedback" class="quiz-card">
       <p class="question-text">{{ currentQuestion.question }}</p>
       
-      <!-- Multiple Choice Options -->
+      <!-- Multiple Choice Options with randomized order -->
       <ul v-if="currentQuestion.type === 'multiple_choice'" class="options-list">
-        <li v-for="option in currentQuestion.options" :key="option">
+        <li v-for="option in currentOptions" :key="option">
           <button class="option-btn" @click="submitAnswer(option)">{{ option }}</button>
         </li>
       </ul>
@@ -33,20 +35,20 @@
       </div>
     </div>
 
-    <!-- Feedback Panel: Displayed after a correct answer or after second attempt -->
+    <!-- Feedback Panel: Shown after correct answer or after second attempt -->
     <div v-if="!quizFinished && showFeedback" class="feedback-panel">
       <p class="feedback-message">{{ feedbackMessage }}</p>
       <div class="mini-lesson">
-        <p><strong>Mesimi:</strong> {{ currentQuestion.miniLesson }}</p>
+        <p><strong>Leksion:</strong> {{ currentQuestion.miniLesson }}</p>
       </div>
-      <!-- Conditionally change button text: if current is last question, show "Perfundo" -->
+      <!-- Conditionally show 'Perfundo' if current is last question -->
       <button class="next-btn" @click="nextQuestion">
         {{ quizStore.currentQuestionIndex + 1 === totalQuestions ? 'Perfundo' : 'Pyetje tjetër' }}
       </button>
     </div>
 
     <!-- Final Results Screen -->
-    <div v-if="quizStore.isQuizFinished" class="final-results">
+    <div v-if="quizFinished" class="final-results">
       <h2>Quiz-i Përfundoi!</h2>
       <p>Pikët: {{ quizStore.score }} / {{ totalQuestions }}</p>
       <div class="share">
@@ -60,7 +62,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useQuizStore } from '../store/quizStore';
 
 const quizStore = useQuizStore();
@@ -68,15 +70,35 @@ const quizStore = useQuizStore();
 const userAnswer = ref('');
 const attemptCount = ref(0);
 const feedbackMessage = ref('');
-// Control when to display the full feedback panel (hides question card)
 const showFeedback = ref(false);
+const copySuccess = ref(false);
 
 const totalQuestions = computed(() => quizStore.selectedQuestions.length);
 const currentQuestion = computed(() => quizStore.currentQuestion);
+const quizFinished = computed(() => quizStore.isQuizFinished);
 
-// Submit answer function, handles both multiple choice and fill-in
+// Helper function: Fisher-Yates shuffle
+function shuffle(array) {
+  const newArr = array.slice();
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+  }
+  return newArr;
+}
+
+// Reactive variable to store shuffled options
+const currentOptions = ref([]);
+
+// Watch for changes in currentQuestion and update shuffled options for multiple choice questions
+watch(currentQuestion, (newQuestion) => {
+  if (newQuestion && newQuestion.type === 'multiple_choice') {
+    currentOptions.value = shuffle(newQuestion.options);
+  }
+}, { immediate: true });
+
+// Function to submit an answer for both types
 function submitAnswer(answer) {
-  // Prevent duplicate submission if feedback panel is active
   if (showFeedback.value) return;
 
   const normalizedAnswer = (typeof answer === 'string' ? answer.trim().toLowerCase() : answer);
@@ -98,7 +120,7 @@ function submitAnswer(answer) {
   }
 }
 
-// Move to the next question
+// Move to the next question and reset local state
 function nextQuestion() {
   feedbackMessage.value = '';
   userAnswer.value = '';
@@ -107,13 +129,12 @@ function nextQuestion() {
   quizStore.nextQuestion();
 }
 
-// Computed share URL using current seed and number of questions
+// Computed share URL that uses the quiz store's seed and selected number
 const shareURL = computed(() => {
   return `${window.location.origin}/bible_quiz/?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
 });
 
-// Clipboard copy logic
-const copySuccess = ref(false);
+// Copy link function
 function copyLink() {
   navigator.clipboard.writeText(shareURL.value).then(() => {
     copySuccess.value = true;
@@ -166,7 +187,7 @@ function copyLink() {
   margin-bottom: 1.5rem;
 }
 
-/* Options list: remove bullets and set spacing */
+/* Options list styling */
 .options-list {
   list-style: none;
   padding: 0;
@@ -216,7 +237,7 @@ function copyLink() {
   font-size: 1.1rem;
 }
 
-/* Feedback Panel styling */
+/* Feedback panel styling */
 .feedback-panel {
   background: #fff;
   border-radius: 8px;
