@@ -113,7 +113,7 @@ function submitAnswer(answer) {
     if (attemptCount.value < 2) {
       feedbackMessage.value = "Gabim, provo përsëri!";
     } else {
-      feedbackMessage.value = `Gabim. Përgjigjja e saktë është: ${currentQuestion.value.answer}`;
+      feedbackMessage.value = `Gabim\nPërgjigjja: ${currentQuestion.value.answer}`;
       showFeedback.value = true;
       quizStore.answerQuestion(false, currentQuestion.value.miniLesson);
     }
@@ -249,9 +249,12 @@ function copyLink() {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  white-space: pre-line;
 }
+
 .mini-lesson {
   margin: 1rem 0;
+  font-size: 1.25rem;
   background-color: #f5f5f5;
   padding: 1rem;
   border-radius: 5px;
