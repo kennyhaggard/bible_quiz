@@ -8,14 +8,16 @@
       </p>
     </header>
 
-    <!-- Quiz Card: Display question (or fill-in input) when feedback panel is not active -->
+    <!-- Quiz Card: Display question or fill-in input when feedback panel is not active -->
     <div v-if="!quizFinished && !showFeedback" class="quiz-card">
       <p class="question-text">{{ currentQuestion.question }}</p>
       
       <!-- Multiple Choice Options with randomized order -->
       <ul v-if="currentQuestion.type === 'multiple_choice'" class="options-list">
         <li v-for="option in currentOptions" :key="option">
-          <button class="option-btn" @click="submitAnswer(option)">{{ option }}</button>
+          <button class="option-btn" @click="submitAnswer(option)">
+            {{ option }}
+          </button>
         </li>
       </ul>
 
@@ -26,7 +28,9 @@
           placeholder="Shkruani përgjigjen këtu"
           class="fill-input"
         />
-        <button class="option-btn" @click="submitAnswer(userAnswer)">Dërgo</button>
+        <button class="option-btn" @click="submitAnswer(userAnswer)">
+          Dërgo
+        </button>
       </div>
 
       <!-- Inline error message for first wrong attempt -->
@@ -35,13 +39,16 @@
       </div>
     </div>
 
-    <!-- Feedback Panel: Shown after correct answer or after second attempt -->
+    <!-- Feedback Panel: Shown after a correct answer or after second attempt -->
     <div v-if="!quizFinished && showFeedback" class="feedback-panel">
-      <p class="feedback-message">{{ feedbackMessage }}</p>
+      <!-- Conditional header with gradient based on feedback type -->
+      <header class="feedback-header" :class="feedbackHeaderClass">
+        <h2>{{ feedbackType }}</h2>
+      </header>
+      <p class="feedback-message" v-html="feedbackMessage"></p>
       <div class="mini-lesson">
-        <p><strong>Mesimi:</strong> {{ currentQuestion.miniLesson }}</p>
+        <p><strong>Mësimi:</strong> {{ currentQuestion.miniLesson }}</p>
       </div>
-      <!-- Conditionally show 'Perfundo' if current is last question -->
       <button class="next-btn" @click="nextQuestion">
         {{ quizStore.currentQuestionIndex + 1 === totalQuestions ? 'Perfundo' : 'Pyetje tjetër' }}
       </button>
@@ -49,6 +56,9 @@
 
     <!-- Final Results Screen -->
     <div v-if="quizFinished" class="final-results">
+      <header class="quiz-header">
+      <h1>Pyetje Biblike</h1>
+      </header>
       <h2>Quiz-i Përfundoi!</h2>
       <p>Pikët: {{ quizStore.score }} / {{ totalQuestions }}</p>
       <div class="share">
@@ -77,7 +87,19 @@ const totalQuestions = computed(() => quizStore.selectedQuestions.length);
 const currentQuestion = computed(() => quizStore.currentQuestion);
 const quizFinished = computed(() => quizStore.isQuizFinished);
 
-// Helper function: Fisher-Yates shuffle
+// Compute feedback type based on message: "Sakte" if correct, "Gabim" if not.
+const feedbackType = computed(() => {
+  return feedbackMessage.value.includes("Bravo")
+    ? "Sakte"
+    : "Gabim";
+});
+
+// Compute a class for the header based on feedback type.
+const feedbackHeaderClass = computed(() => {
+  return feedbackType.value === "Sakte" ? "feedback-header-sakte" : "feedback-header-gabim";
+});
+
+// Helper: Fisher-Yates shuffle to randomize multiple-choice options.
 function shuffle(array) {
   const newArr = array.slice();
   for (let i = newArr.length - 1; i > 0; i--) {
@@ -87,25 +109,25 @@ function shuffle(array) {
   return newArr;
 }
 
-// Reactive variable to store shuffled options
+// Reactive variable for randomized options.
 const currentOptions = ref([]);
 
-// Watch for changes in currentQuestion and update shuffled options for multiple choice questions
+// Watch for changes in currentQuestion to update shuffled options.
 watch(currentQuestion, (newQuestion) => {
   if (newQuestion && newQuestion.type === 'multiple_choice') {
     currentOptions.value = shuffle(newQuestion.options);
   }
 }, { immediate: true });
 
-// Function to submit an answer for both types
+// Function to submit an answer.
 function submitAnswer(answer) {
   if (showFeedback.value) return;
 
-  const normalizedAnswer = (typeof answer === 'string' ? answer.trim().toLowerCase() : answer);
+  const normalizedAnswer = typeof answer === 'string' ? answer.trim().toLowerCase() : answer;
   const normalizedCorrect = currentQuestion.value.answer.trim().toLowerCase();
 
   if (normalizedAnswer === normalizedCorrect) {
-    feedbackMessage.value = "Saktë!";
+    feedbackMessage.value = "Bravo!";
     showFeedback.value = true;
     quizStore.answerQuestion(true, currentQuestion.value.miniLesson);
   } else {
@@ -113,14 +135,15 @@ function submitAnswer(answer) {
     if (attemptCount.value < 2) {
       feedbackMessage.value = "Gabim, provo përsëri!";
     } else {
-      feedbackMessage.value = `Gabim\nPërgjigjja: ${currentQuestion.value.answer}`;
+      // Use HTML line break for wrong answer feedback.
+      feedbackMessage.value = `Përgjigjja: ${currentQuestion.value.answer}`;
       showFeedback.value = true;
       quizStore.answerQuestion(false, currentQuestion.value.miniLesson);
     }
   }
 }
 
-// Move to the next question and reset local state
+// Function to proceed to the next question.
 function nextQuestion() {
   feedbackMessage.value = '';
   userAnswer.value = '';
@@ -129,12 +152,12 @@ function nextQuestion() {
   quizStore.nextQuestion();
 }
 
-// Computed share URL that uses the quiz store's seed and selected number
+// Computed share URL using the current seed and selected number.
 const shareURL = computed(() => {
   return `${window.location.origin}/bible_quiz/?seed=${quizStore.seed}&num=${quizStore.selectedNumber}`;
 });
 
-// Copy link function
+// Copy share URL to clipboard.
 function copyLink() {
   navigator.clipboard.writeText(shareURL.value).then(() => {
     copySuccess.value = true;
@@ -152,7 +175,7 @@ function copyLink() {
   text-align: center;
 }
 
-/* Header with gradient background */
+/* Quiz header styling */
 .quiz-header {
   background: linear-gradient(135deg, #ff7e5f, #feb47b);
   padding: 1rem;
@@ -167,6 +190,22 @@ function copyLink() {
 .progress {
   margin-top: 0.5rem;
   font-size: 1rem;
+}
+
+/* Feedback header base style */
+.feedback-header {
+  padding: 1rem;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 1rem;
+}
+/* Gradient for correct answers */
+.feedback-header-sakte {
+  background: linear-gradient(135deg, #43cea2, #185a9d);
+}
+/* Gradient for wrong answers */
+.feedback-header-gabim {
+  background: linear-gradient(135deg, #f39c12, #f1c40f);
 }
 
 /* Quiz card styling */
@@ -249,12 +288,10 @@ function copyLink() {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
-  white-space: pre-line;
 }
-
 .mini-lesson {
   margin: 1rem 0;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   background-color: #f5f5f5;
   padding: 1rem;
   border-radius: 5px;
