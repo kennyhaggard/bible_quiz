@@ -39,7 +39,7 @@
     <div v-if="!quizFinished && showFeedback" class="feedback-panel">
       <p class="feedback-message">{{ feedbackMessage }}</p>
       <div class="mini-lesson">
-        <p><strong>Leksion:</strong> {{ currentQuestion.miniLesson }}</p>
+        <p><strong>Mesimi:</strong> {{ currentQuestion.miniLesson }}</p>
       </div>
       <!-- Conditionally show 'Perfundo' if current is last question -->
       <button class="next-btn" @click="nextQuestion">
